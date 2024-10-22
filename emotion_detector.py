@@ -1,10 +1,13 @@
+import os
 import cv2
 import numpy as np
 import tkinter as tk
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 from PIL import Image, ImageTk
 
-model = load_model('emotion_model.h5')
+base_path = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_path, 'emotion_model.h5')
+model = tf.keras.models.load_model(model_path)
 
 emotion_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
@@ -36,8 +39,12 @@ def update_frame():
     
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    haarcascade_path = os.path.join(cv2.data.haarcascades, 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier(haarcascade_path)
     faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
+
+    if face_cascade.empty():
+        raise Exception("Could not load Haar Cascade XML file. Check the file path.")
 
     for (x, y, w, h) in faces:
 

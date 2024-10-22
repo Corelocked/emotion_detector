@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from tensorflow.keras.utils import to_categorical
+import tensorflow as tf
 from ml_model import build_model 
 
 fer_dataset = 'fer2013.csv'
@@ -26,9 +26,9 @@ train_labels = train_df['emotion'].values
 val_labels = val_df['emotion'].values
 test_labels = test_df['emotion'].values
 
-train_labels_cat = to_categorical(train_labels, num_classes=7)
-val_labels_cat = to_categorical(val_labels, num_classes=7)
-test_labels_cat = to_categorical(test_labels, num_classes=7)
+train_labels_cat = tf.keras.utils.to_categorical(train_labels, num_classes=7)
+val_labels_cat = tf.keras.utils.to_categorical(val_labels, num_classes=7)
+test_labels_cat = tf.keras.utils.to_categorical(test_labels, num_classes=7)
 
 train_pixels = train_pixels.reshape(train_pixels.shape[0], 48, 48, 1)
 val_pixels = val_pixels.reshape(val_pixels.shape[0], 48, 48, 1)
